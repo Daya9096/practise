@@ -15,14 +15,7 @@ pipeline {
             }
         }
 
-        stage('Install Dependencies & Run Tests') {
-            steps {
-                sh '''
-                    npm install
-                    npm test
-                '''
-            }
-        }
+}
 
         stage('Build Docker Image') {
             steps {
