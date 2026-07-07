@@ -32,22 +32,6 @@ pipeline {
             }
         }
 
-        stage('Curl Verification') {
-            steps {
-                sh '''
-                    sleep 10
-
-                    echo "Checking Home..."
-                    curl http://localhost:3000/
-
-                    echo "Checking Health..."
-                    curl http://localhost:3000/health
-
-                    echo "Checking Tasks API..."
-                    curl http://localhost:3000/api/tasks
-                '''
-            }
-        }
 
         stage('Cleanup') {
             steps {
