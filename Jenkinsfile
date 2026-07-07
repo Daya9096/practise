@@ -15,6 +15,15 @@ pipeline {
             }
         }
 
+        stage('Install Dependencies & Run Tests') {
+            steps {
+                sh '''
+                    npm install
+                    npm test
+                '''
+            }
+        }
+
         stage('Build Docker Image') {
             steps {
                 sh '''
@@ -26,12 +35,28 @@ pipeline {
         stage('Deploy using Docker Compose') {
             steps {
                 sh '''
-                    docker-compose down || true
-                    docker-compose up -d
+                    docker compose down || true
+                    docker compose up -d --build
                 '''
             }
         }
 
+        stage('Curl Verification') {
+            steps {
+                sh '''
+                    sleep 10
+
+                    echo "Checking Home..."
+                    curl http://localhost:3000/
+
+                    echo "Checking Health..."
+                    curl http://localhost:3000/health
+
+                    echo "Checking Tasks API..."
+                    curl http://localhost:3000/api/tasks
+                '''
+            }
+        }
 
         stage('Cleanup') {
             steps {
@@ -40,7 +65,6 @@ pipeline {
                 '''
             }
         }
-
     }
 
     post {
